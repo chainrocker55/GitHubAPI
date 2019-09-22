@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+    
+    <div class="section">
+        <h1>Search user on GitHub</h1>
+        <div id="NotFoundUser" class="alert " role="alert">
+
+        </div>
+
+        <form id="formSearchUser" class="form-inline">
+            <div class="form-group mb-2">
+                <label style="margin-right:10px;font-style:normal;font-size:2em" for="user" class="">User Github:</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input type="text"  class="form-control" id="user" required placeholder="Enter user">
+            </div>
+            <button type="button" onclick="checkNull()" class="btn btn-primary mb-2">Search</button>
+        </form>
+        <br />
+       
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 id="titleRepository"></h4>
+            </div>
+            <div class="col-sm-4" >
+                <h4 id="titleLanguages"></h4>
+                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <ul id="repository" class="flex-column">
+
+                    @*render repository in here*@
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <div id="loadingLanguages" class="loader hidden">  </div>
+                <ul id="languages" class="flex-column">
+
+                    @*render languages in here*@
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+
+
+<script type="text/javascript">
+
+    function checkNull() {
+        var user = $("#user").val()
+        if (user.length == 0 || user == "") {
+            var helper = document.getElementById("NotFoundUser")
+            helper.innerHTML = "Please enter your username GitHub in textbox."
+            helper.classList.add("alert-danger")
+        } else {
+            loadRepository(user) 
+        }
+    }
+
+    function loadRepository(user) {
+        //var user = $("#user").val()
+        $("#repository").empty()
+        $("#languages").empty()
+        $.ajax({
+            headers: {
+                Accept: "application/vnd.github.symmetra-preview+json",
+                "Content-Type": "application/json",
+                "Authorization": "token 05bb4d7e9872a1bddd9ab893e9cdf33d2c17ead3"
+            },
+            url: "https://api.github.com/users/" + user + "/repos",
+            method: 'GET',
+            success: function (res) {
+
+                var helper = document.getElementById("NotFoundUser")
+                helper.classList.remove("alert-danger")
+                helper.innerHTML = null
+                render(res, user, async function (result) {
+                    console.log(result)
+                    var mapData = await mapReduce(result)
+                    console.log(mapData)
+                    await renderLanguages(mapData)
+                    document.getElementById("loadingLanguages").classList.add("hidden")
+
+                })
+            },
+            error: function () {
+                var helper = document.getElementById("NotFoundUser")
+                helper.innerHTML = "Not found user " + user + " from github"
+                helper.classList.add("alert-danger")
+                document.getElementById("titleRepository").innerHTML = null
+                 document.getElementById("titleLangueges").innerHTML = ""
+
+            }
+        });
+
+    }
+
+    function render(data, user, callback) {
+        var api = "https://api.github.com/repos/" + user + "/"
+        var type = "/zipball/master"
+        var languages = []
+        document.getElementById("titleRepository").innerHTML = "All Repository : " + user
+        document.getElementById("titleLanguages").innerHTML = "Qualification Languages"
+        document.getElementById("loadingLanguages").classList.remove("hidden")
+        $.each(data, function (index, element) {
+            $("#repository").append("<li class=\"nav-item\"><a class=\"nav-link\" href=\"" + api + element.name + type + "\">" + (index + 1) + " " + element.name + "</a></li>")
+            search(element.name, user, function (res) {
+
+                //$("#repository").append("<li class=\"nav-item\">"+(index+1)+". " + JSON.stringify(res) + "</li>")
+                var obj = JSON.parse(JSON.stringify(res))
+                languages.push(obj)
+                if (languages.length == data.length) {
+                    callback(languages)
+                }
+            });
+        });
+
+
+    }
+
+    function renderLanguages(data) {
+
+        $.each(data, function (key, value) {
+            $("#languages").append("<li class=\"nav-item\"><b>" + key + " </b> score : " + value + "</li>")
+        });
+    }
+
+    function getData(data) {
+
+        $("#repository").append("<li class=\"nav-item\"> " + JSON.stringify(data) + "</li>")
+
+    }
+
+    function search(repo, user, callback) {
+        $.ajax({
+            headers: {
+                Accept: "application/vnd.github.symmetra-preview+json",
+                "Content-Type": "text/plain; charset=utf-8",
+                "Authorization": "token 05bb4d7e9872a1bddd9ab893e9cdf33d2c17ead3"
+            },
+            url: "https://api.github.com/repos/" + user + "/" + repo + "/languages",
+            method: 'GET',
+            success: callback
+        });
+    }
+    function mapReduce(data) {
+        var result = data.reduce(function (r, e) {
+            return Object.keys(e).forEach(function (k) {
+                if (!r[k]) {
+                    r[k] = parseInt(e[k])
+                }
+                else {
+                    r[k] = parseInt(r[k]) + parseInt(e[k])
+                }
+            }), r
+        }, {})
+
+        return result
+    }
+</script>

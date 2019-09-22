@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+
+
+    <div class="content " bis_skin_checked="1">
+        <br />
+        <br />
+        <br />
+        <h1>GitHub REST API v3</h1>
+        <p>This describes the resources that make up the official GitHub REST API v3. If you have any problems or requests, please contact <a href="https://github.com/contact">GitHub Support</a>.</p>
+        <h1>
+            <a id="understanding-rate-limits-for-github-apps" class="anchor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Understanding rate limits for GitHub Apps
+        </h1>
+
+        <div class="intro" bis_skin_checked="1">
+
+            <p>Rate limits for GitHub Apps help control the rate of traffic.</p>
+
+        </div>
+
+        <h2>
+            <a id="server-to-server-requests" class="anchor" href="#server-to-server-requests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Server-to-server requests
+        </h2>
+        
+        <p>GitHub Apps making server-to-server requests use the installation's minimum rate limit of 5,000 requests per hour. Organization installations with more than 20 users receive another 50 requests per hour for each user. Installations that have more than 20 repositories receive another 50 requests per hour for each repository. The maximum rate limit for an installation is 12,500 requests per hour.</p>
+
+        <h2>
+            <a id="user-to-server-requests" class="anchor" href="#user-to-server-requests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>User-to-server requests
+        </h2>
+
+        <p>GitHub Apps can also act <a href="https://developer.github.com/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/#identifying-and-authorizing-users-for-github-apps">on behalf of a user</a>, making user-to-server requests. These requests are rate limited at 5,000 requests per hour and per authenticated user. All OAuth applications authorized by that user, all of the user's personal access tokens, and all requests authenticated with that user's username and password share the same quota of 5,000 requests per hour for that user.</p>
+        <br />
+        <p>For more detailed information about rate limits, see "<a href="https://developer.github.com/v3/#rate-limiting">Rate limiting</a>" for REST API v3 and "<a href="https://developer.github.com/v4/guides/resource-limitations/">Resource limitations</a>" for GraphQL API v4.</p>
+        <h2>This application</h2>
+        <p>This application use personal access tokens. These requests are rate limited at 5,000 requests per hour</p>
+    </div>
+
+
+
