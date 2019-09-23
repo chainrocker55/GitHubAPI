@@ -15,7 +15,7 @@
             <div class="form-group mx-sm-3 mb-2">
                 <input type="text"  class="form-control" id="user" required placeholder="Enter user">
             </div>
-            <button type="button" onclick="checkNull()" class="btn btn-primary mb-2">Search</button>
+            <button type="button" onclick="checkNull()" id="inputUser" class="btn btn-primary mb-2">Search</button>
         </form>
         <br />
        
@@ -50,8 +50,16 @@
 
 
 <script type="text/javascript">
+    $('#user').keypress(function(event){
+	
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		alert('You pressed a "enter" key in textbox');	
+	}
 
+    });
     function checkNull() {
+        event.preventDefault();
         var user = $("#user").val()
         if (user.length == 0 || user == "") {
             var helper = document.getElementById("NotFoundUser")
@@ -112,6 +120,7 @@
                 helper.classList.add("alert-danger")
                 document.getElementById("titleRepository").innerHTML = null
                 document.getElementById("titleLanguages").innerHTML = ""
+                document.getElementById("loadingLanguages").classList.add("hidden")
 
             }
         });
@@ -157,9 +166,10 @@
     function search(repo, user, callback) {
         $.ajax({
             headers: {
-                Accept: "application/vnd.github.symmetra-preview+json",
-                "Content-Type": "text/plain; charset=utf-8",
-                "Authorization": "token ca9fb3f5702aebd9213eb80a7c8e49a0f468b430"
+                Accept: "aapplication/vnd.github.v3+json",
+                "Content-Type": "application/vnd.github.v3+json",
+                "Authorization": "token 415f825d05b45ad17d9f3fc348846e5ecd84e8b3",
+                "User-Agent": "Awesome-Octocat-App"
             },
             url: "https://api.github.com/repos/" + user + "/" + repo + "/languages",
             method: 'GET',
