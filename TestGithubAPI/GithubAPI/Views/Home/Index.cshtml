@@ -70,30 +70,46 @@
             headers: {
                 Accept: "application/vnd.github.symmetra-preview+json",
                 "Content-Type": "application/json",
-                "Authorization": "token 05bb4d7e9872a1bddd9ab893e9cdf33d2c17ead3"
+                "Authorization": "token 86af0c28ff357d969f06f1a0e4b74b90f38b7180"
             },
             url: "https://api.github.com/users/" + user + "/repos",
             method: 'GET',
+            credentials: 'same-origin',
             success: function (res) {
 
-                var helper = document.getElementById("NotFoundUser")
-                helper.classList.remove("alert-danger")
-                helper.innerHTML = null
-                render(res, user, async function (result) {
-                    console.log(result)
-                    var mapData = await mapReduce(result)
-                    console.log(mapData)
-                    await renderLanguages(mapData)
-                    document.getElementById("loadingLanguages").classList.add("hidden")
+                if (res.length != 0) {
+                    var helper = document.getElementById("NotFoundUser")
+                    helper.classList.remove("alert-danger")
+                    helper.innerHTML = null
+                    render(res, user, async function (result) {
+                        console.log(result)
+                        var mapData = await mapReduce(result)
+                        console.log(mapData)
+                        await renderLanguages(mapData)
+                        document.getElementById("loadingLanguages").classList.add("hidden")
 
-                })
+                    })
+                } else {
+                    var helper = document.getElementById("NotFoundUser")
+                    helper.innerHTML = "Not found user " + user + " from github"
+                    helper.classList.add("alert-danger")
+                }
+                
             },
-            error: function () {
+            error: function (jqXHR, textStatus, errorThrown) {
                 var helper = document.getElementById("NotFoundUser")
-                helper.innerHTML = "Not found user " + user + " from github"
+                console.log(jqXHR.status);
+                console.log(textStatus);
+                console.log(errorThrown);
+                //if (err.statusCode == 401 || err.statusCode == 403) {
+                //    helper.innerHTML = "Accese to token is expire or not permisstion."
+                //} else {
+                //    helper.innerHTML = errorThrown + " user " + user + " from github"
+                //}
+                helper.innerHTML = errorThrown + " user " + user + " from GitHub"
                 helper.classList.add("alert-danger")
                 document.getElementById("titleRepository").innerHTML = null
-                 document.getElementById("titleLangueges").innerHTML = ""
+                document.getElementById("titleLanguages").innerHTML = ""
 
             }
         });
@@ -141,10 +157,11 @@
             headers: {
                 Accept: "application/vnd.github.symmetra-preview+json",
                 "Content-Type": "text/plain; charset=utf-8",
-                "Authorization": "token 05bb4d7e9872a1bddd9ab893e9cdf33d2c17ead3"
+                "Authorization": "token 86af0c28ff357d969f06f1a0e4b74b90f38b7180"
             },
             url: "https://api.github.com/repos/" + user + "/" + repo + "/languages",
             method: 'GET',
+            credentials: 'same-origin',
             success: callback
         });
     }

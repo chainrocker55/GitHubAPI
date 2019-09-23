@@ -30,3 +30,5 @@ C:\Users\chainrocker\source\repos\TestGithubAPI\GithubAPI\obj\Debug\netcoreapp2.
 C:\Users\chainrocker\source\repos\TestGithubAPI\GithubAPI\obj\Debug\netcoreapp2.1\GithubAPI.pdb
 C:\Users\chainrocker\source\repos\TestGithubAPI\GithubAPI\obj\Debug\netcoreapp2.1\GithubAPI.csproj.CopyComplete
 C:\Users\chainrocker\source\repos\TestGithubAPI\GithubAPI\obj\Debug\netcoreapp2.1\GithubAPI.csprojAssemblyReference.cache
+C:\Users\chainrocker\source\repos\TestGithubAPI\GithubAPI\obj\Debug\netcoreapp2.1\GithubAPI.Properties.Resources.resources
+C:\Users\chainrocker\source\repos\TestGithubAPI\GithubAPI\obj\Debug\netcoreapp2.1\GithubAPI.csproj.GenerateResource.cache
