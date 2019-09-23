@@ -15,8 +15,6 @@ namespace GithubAPI.Controllers
     public class HomeController : Controller
     {
 
-
-
         public IActionResult Index()
         {
             return View();
@@ -31,6 +29,7 @@ namespace GithubAPI.Controllers
 
         public IActionResult Contact()
         {
+
             ViewData["Message"] = "Your contact me";
 
             return View();
